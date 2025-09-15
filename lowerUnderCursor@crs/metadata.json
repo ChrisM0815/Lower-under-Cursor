@@ -4,5 +4,5 @@
   "description": "Lowers the (unfocused) window under the mouse cursor in the z-order",
   "shell-version": ["5.8", "6.0"],
   "cinnamon-version": ["6.4"],
-  "url": "127.0.0.1"
+  "url": "https://github.com/ChrisM0815/Lower-under-Cursor"
 }
