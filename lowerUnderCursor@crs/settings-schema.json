@@ -1,0 +1,7 @@
+{
+  "trigger": {
+    "type": "keybinding",
+    "description": "Lower the window under the cursor in the Z-order.",
+    "default": "<Alt><Super>B"
+  }
+}
