@@ -6,18 +6,37 @@ class LUCExtension {
   constructor(metaData) {
     this.meta = metaData;
     this.stack = [];
-    this.focusAfterLower = false;
+    this.settingIDs = [];
   }
 
   enable() {
     this.settings = new Settings.ExtensionSettings(this, this.meta.uuid);
     this.bindHotkey();
-    this.focusAfterLower = this.settings.getValue("focus-after-lower");
-    global.log(this.focusAfterLower);
+    this.onSettingChangeFocus();
+    let focusId = this.settings.connect(
+      "changed::focus-after-lower",
+      Lang.bind(this, this.onSettingChangeFocus),
+    );
+    let triggerId = this.settings.connect(
+      "changed::trigger",
+      Lang.bind(this, this.onSettingChangeHotkey),
+    );
+    this.settingIDs.push(focusId, triggerId);
   }
 
   disable() {
     this.disableHotkey();
+    this._settingsChangeIds.forEach((id) => this.settings.disconnect(id));
+    this._settingsChangeIds = [];
+  }
+
+  onSettingChangeFocus() {
+    this.focusAfterLower = this.settings.getValue("focus-after-lower");
+  }
+
+  onSettingChangeHotkey() {
+    this.disableHotkey();
+    this.bindHotkey();
   }
 
   getHotkeySequence(name) {
@@ -53,7 +72,6 @@ class LUCExtension {
     if (this.focusAfterLower) {
       let windowToFocus = global.display.get_pointer_window(null);
       if (windowToFocus) {
-        global.log(this.focusAfterLower);
         windowToFocus.activate(global.get_current_time());
       }
     }
