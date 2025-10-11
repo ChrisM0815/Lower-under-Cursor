@@ -43,10 +43,14 @@ class LUCExtension {
 
   onHotkeyPress() {
     //global.log("LUC Extension: Trigger pressed");
+    let focusTopWindow = false;
     let window = global.display.get_pointer_window(null);
-    if (window) {
-      window.lower();
-    }
+    if (!window) return;
+    window.lower();
+    if (!focusTopWindow) return;
+    window = global.display.get_pointer_window(null);
+    if (!window) return;
+    window.activate(global.get_current_time());
   }
 }
 
