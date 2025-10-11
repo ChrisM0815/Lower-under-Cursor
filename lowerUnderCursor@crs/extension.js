@@ -6,11 +6,14 @@ class LUCExtension {
   constructor(metaData) {
     this.meta = metaData;
     this.stack = [];
+    this.focusAfterLower = false;
   }
 
   enable() {
     this.settings = new Settings.ExtensionSettings(this, this.meta.uuid);
     this.bindHotkey();
+    this.focusAfterLower = this.settings.getValue("focus-after-lower");
+    global.log(this.focusAfterLower);
   }
 
   disable() {
@@ -43,14 +46,17 @@ class LUCExtension {
 
   onHotkeyPress() {
     //global.log("LUC Extension: Trigger pressed");
-    let focusTopWindow = false;
-    let window = global.display.get_pointer_window(null);
-    if (!window) return;
-    window.lower();
-    if (!focusTopWindow) return;
-    window = global.display.get_pointer_window(null);
-    if (!window) return;
-    window.activate(global.get_current_time());
+    let windowToLower = global.display.get_pointer_window(null);
+    if (windowToLower) {
+      windowToLower.lower();
+    }
+    if (this.focusAfterLower) {
+      let windowToFocus = global.display.get_pointer_window(null);
+      if (windowToFocus) {
+        global.log(this.focusAfterLower);
+        windowToFocus.activate(global.get_current_time());
+      }
+    }
   }
 }
 

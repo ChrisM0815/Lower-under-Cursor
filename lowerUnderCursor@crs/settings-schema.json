@@ -3,5 +3,10 @@
     "type": "keybinding",
     "description": "Lower the window under the cursor in the Z-order.",
     "default": "<Alt><Super>B"
+  },
+  "focus-after-lower": {
+    "type": "checkbox",
+    "description": "Activate Focus for the window under the cursor after lowering the window above it.",
+    "default": false
   }
 }
